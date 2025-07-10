@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexa Trainings - Your Personal Trainer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+            line-height: 1.6;
+            color: #333;
+        }
+        .hero-background {
+            /* Using a more dynamic placeholder for the hero image */
+            background-image: url('https://photos.app.goo.gl/pwieh7YmwQL8RPUx6');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.7); /* Slightly darker overlay for better text contrast */
+        }
+        .btn-primary {
+            background-color: #ef4444; /* Red-500 */
+            color: white;
+            padding: 0.85rem 2rem; /* Slightly larger padding */
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+        }
+        .btn-primary:hover {
+            background-color: #dc2626; /* Red-600 */
+            transform: translateY(-3px); /* Stronger lift effect */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .btn-secondary {
+            background-color: #2563eb; /* Blue-600 */
+            color: white;
+            padding: 0.85rem 2rem; /* Slightly larger padding */
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-left: 1.5rem; /* Increased space between buttons */
+        }
+        .btn-secondary:hover {
+            background-color: #1d4ed8; /* Blue-700 */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2.5rem; /* Increased margin */
+            font-size: 3rem; /* Larger font size */
+            font-weight: 800; /* Bolder font */
+            color: #222; /* Darker text for contrast */
+            text-transform: uppercase; /* Uppercase for impact */
+            letter-spacing: 0.05em; /* Slight letter spacing */
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px; /* Adjusted position */
+            transform: translateX(-50%);
+            width: 100px; /* Wider underline */
+            height: 5px; /* Thicker underline */
+            background-color: #ef4444;
+            border-radius: 3px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem; /* More rounded corners */
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15), 0 6px 12px -3px rgba(0, 0, 0, 0.08); /* Stronger shadow */
+            padding: 2.5rem; /* More padding */
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+            border: 1px solid #eee; /* Subtle border */
+        }
+        .card:hover {
+            transform: translateY(-8px); /* More pronounced lift */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+        }
+        .icon {
+            color: #ef4444;
+            font-size: 3.5rem; /* Larger icons */
+            margin-bottom: 1.5rem; /* More space below icon */
+        }
+
+        /* Animations for UI friendliness */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0; /* Ensure elements are hidden before animation */
+        }
+        .animate-fade-in-delay-1 { animation-delay: 0.2s; }
+        .animate-fade-in-delay-2 { animation-delay: 0.4s; }
+        .animate-fade-in-delay-3 { animation-delay: 0.6s; }
+        .animate-fade-in-delay-4 { animation-delay: 0.8s; }
+        .animate-fade-in-delay-5 { animation-delay: 1s; }
+
+        /* Scroll to Top Button Styling */
+        #scroll-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #ef4444;
+            color: white;
+            padding: 1rem 1.25rem; /* Larger button */
+            border-radius: 9999px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            z-index: 1000;
+        }
+        #scroll-to-top:hover {
+            background-color: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Form input focus styles */
+        input:focus, textarea:focus {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-gray-900 text-white py-4 shadow-lg w-full">
+        <nav class="container mx-auto flex justify-between items-center px-4 py-2">
+            <a href="#home" class="text-3xl font-extrabold text-red-500 tracking-wide">Alexa Trainings</a>
+            <ul class="hidden md:flex space-x-8 text-lg">
+                <li><a href="#home" class="hover:text-red-500 transition duration-300 ease-in-out">Home</a></li>
+                <li><a href="#services" class="hover:text-red-500 transition duration-300 ease-in-out">Services</a></li>
+                <li><a href="#about" class="hover:text-red-500 transition duration-300 ease-in-out">About Us</a></li>
+                <li><a href="#testimonials" class="hover:text-red-500 transition duration-300 ease-in-out">Testimonials</a></li>
+                <li><a href="#contact" class="hover:text-red-500 transition duration-300 ease-in-out">Contact</a></li>
+                <li><a href="https://rtxsports.de" target="_blank" rel="noopener noreferrer" class="hover:text-red-500 transition duration-300 ease-in-out">Shop</a></li>
+            </ul>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none p-2 rounded-md hover:bg-gray-700 transition duration-300">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 py-4">
+            <ul class="flex flex-col items-center space-y-4 text-lg">
+                <li><a href="#home" class="block py-2 px-4 text-white hover:bg-gray-700 w-full text-center rounded-md transition duration-300">Home</a></li>
+                <li><a href="#services" class="block py-2 px-4 text-white hover:bg-gray-700 w-full text-center rounded-md transition duration-300">Services</a></li>
+                <li><a href="#about" class="block py-2 px-4 text-white hover:bg-gray-700 w-full text-center rounded-md transition duration-300">About Us</a></li>
+                <li><a href="#testimonials" class="block py-2 px-4 text-white hover:bg-gray-700 w-full text-center rounded-md transition duration-300">Testimonials</a></li>
+                <li><a href="#contact" class="block py-2 px-4 text-white hover:bg-gray-700 w-full text-center rounded-md transition duration-300">Contact</a></li>
+                <li><a href="https://rtxsports.de" target="_blank" rel="noopener noreferrer" class="block py-2 px-4 text-white hover:bg-gray-700 w-full text-center rounded-md transition duration-300">Shop</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-background h-screen flex items-center justify-center text-white text-center relative px-4">
+        <div class="overlay absolute inset-0"></div>
+        <div class="container mx-auto z-10">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight mb-6 animate-fade-in drop-shadow-lg">
+                Transform Your Body, Transform Your Life
+            </h1>
+            <p class="text-lg md:text-xl lg:text-2xl mb-10 max-w-3xl mx-auto animate-fade-in animate-fade-in-delay-1 drop-shadow-md">
+                Achieve your fitness goals with personalized training plans and expert guidance from certified trainers.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in animate-fade-in-delay-2">
+                <a href="#contact" class="btn-primary inline-block text-lg md:text-xl">
+                    Get Started Today
+                </a>
+                <a href="https://rtxsports.de" target="_blank" rel="noopener noreferrer" class="btn-secondary inline-block text-lg md:text-xl">
+                    Visit Our Shop
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="section-title animate-fade-in">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
+                <!-- Service Card 1 -->
+                <div class="card animate-fade-in animate-fade-in-delay-2">
+                    <i class="fas fa-dumbbell icon"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Personal Training</h3>
+                    <p class="text-gray-600">One-on-one sessions tailored to your specific needs and fitness level, ensuring maximum results.</p>
+                </div>
+                <!-- Service Card 2 -->
+                <div class="card animate-fade-in animate-fade-in-delay-3">
+                    <i class="fas fa-users icon"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Group Classes</h3>
+                    <p class="text-gray-600">Energizing group workouts including HIIT, yoga, spinning, and more, fostering a supportive community.</p>
+                </div>
+                <!-- Service Card 3 -->
+                <div class="card animate-fade-in animate-fade-in-delay-4">
+                    <i class="fas fa-apple-alt icon"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Nutritional Guidance</h3>
+                    <p class="text-gray-600">Expert advice and meal plans to complement your training, optimizing your health and performance.</p>
+                </div>
+                <!-- Service Card 4 -->
+                <div class="card animate-fade-in animate-fade-in-delay-2">
+                    <i class="fas fa-running icon"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Strength & Conditioning</h3>
+                    <p class="text-gray-600">Programs designed to build strength, improve endurance, and enhance athletic performance.</p>
+                </div>
+                <!-- Service Card 5 -->
+                <div class="card animate-fade-in animate-fade-in-delay-3">
+                    <i class="fas fa-heartbeat icon"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Cardio & Endurance</h3>
+                    <p class="text-gray-600">Effective cardio routines to boost your cardiovascular health and stamina.</p>
+                </div>
+                <!-- Service Card 6 -->
+                <div class="card animate-fade-in animate-fade-in-delay-4">
+                    <i class="fas fa-child icon"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Flexibility & Mobility</h3>
+                    <p class="text-gray-600">Improve your range of motion and prevent injuries with specialized flexibility exercises.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="section-title animate-fade-in">About Us</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center mt-16 gap-12">
+                <div class="md:w-1/2 animate-fade-in animate-fade-in-delay-2">
+                    <!-- Updated image for Alexa Hayes with a more dynamic placeholder -->
+                    <img src="https://i.ibb.co/zHL51JLV/sports-2025-04-01-21-43-14-utc.jpg" alt="Alexa Hayes - Your Trainer" class="rounded-xl shadow-2xl w-full h-auto object-cover transform hover:scale-105 transition duration-500 ease-in-out">
+                </div>
+                <div class="md:w-1/2 text-left animate-fade-in animate-fade-in-delay-3">
+                    <h3 class="text-4xl font-bold text-gray-800 mb-6">Meet Your Trainer: Alexa Hayes</h3>
+                    <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                        Hello! I'm Alexa Hayes, a 25-year-old certified personal trainer currently based in Berlin, Germany. At Alexa Trainings, my passion is to guide you through your fitness journey, helping you unlock your full potential.
+                    </p>
+                    <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                        I believe that fitness is a journey, not a destination. My mission is to empower individuals to achieve their health and wellness goals through personalized training, innovative classes, and a supportive community. I focus on sustainable results, ensuring you build healthy habits for life.
+                    </p>
+                    <p class="text-gray-700 text-lg leading-relaxed">
+                        Join me at Alexa Trainings and discover a fitter, healthier, and happier you!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="section-title animate-fade-in">What Our Clients Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
+                <!-- Testimonial Card 1 -->
+                <div class="card p-8 animate-fade-in animate-fade-in-delay-2">
+                    <img src="https://placehold.co/100x100/ef4444/FFFFFF?text=Client1" alt="Client 1" class="w-24 h-24 rounded-full mx-auto mb-6 object-cover border-4 border-red-200 shadow-md">
+                    <p class="text-gray-700 italic text-lg mb-6">"Alexa Trainings changed my life! The trainers are incredibly supportive and knowledgeable. I've never felt better and achieved results I never thought possible."</p>
+                    <p class="font-semibold text-gray-800 text-xl">- Jane Doe</p>
+                    <p class="text-base text-gray-500">Weight Loss Client</p>
+                </div>
+                <!-- Testimonial Card 2 -->
+                <div class="card p-8 animate-fade-in animate-fade-in-delay-3">
+                    <img src="https://placehold.co/100x100/ef4444/FFFFFF?text=Client2" alt="Client 2" class="w-24 h-24 rounded-full mx-auto mb-6 object-cover border-4 border-red-200 shadow-md">
+                    <p class="text-gray-700 italic text-lg mb-6">"The group classes are amazing! Such a motivating environment and I love the variety of workouts. Every session is a new challenge."</p>
+                    <p class="font-semibold text-gray-800 text-xl">- John Smith</p>
+                    <p class="text-base text-gray-500">Group Class Member</p>
+                </div>
+                <!-- Testimonial Card 3 -->
+                <div class="card p-8 animate-fade-in animate-fade-in-delay-4">
+                    <img src="https://placehold.co/100x100/ef4444/FFFFFF?text=Client3" alt="Client 3" class="w-24 h-24 rounded-full mx-auto mb-6 object-cover border-4 border-red-200 shadow-md">
+                    <p class="text-gray-700 italic text-lg mb-6">"I've seen incredible progress with my personal trainer. Their nutritional guidance has been a game-changer and truly holistic approach."</p>
+                    <p class="font-semibold text-gray-800 text-xl">- Emily White</p>
+                    <p class="text-base text-gray-500">Personal Training Client</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="section-title animate-fade-in">Get In Touch</h2>
+            <p class="text-xl text-gray-700 mb-12 max-w-3xl mx-auto">
+                Ready to start your fitness journey? Contact us today to schedule a consultation or learn more about our programs.
+            </p>
+            <div class="max-w-2xl mx-auto bg-gray-50 p-10 rounded-xl shadow-2xl animate-fade-in animate-fade-in-delay-2">
+                <form id="contact-form">
+                    <div class="mb-6 text-left">
+                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200" placeholder="Your Full Name" required>
+                    </div>
+                    <div class="mb-6 text-left">
+                        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="mb-8 text-left">
+                        <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Message</label>
+                        <textarea id="message" name="message" rows="6" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200" placeholder="Tell us about your fitness goals..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary w-full py-4 font-semibold text-xl">Send Message</button>
+                    <div id="form-message" class="mt-4 text-center text-green-600 font-semibold hidden"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-10 text-center">
+        <div class="container mx-auto px-4">
+            <p class="text-lg mb-4">&copy; 2025 Alexa Trainings. All rights reserved.</p>
+            <div class="flex justify-center space-x-6 mt-4 text-2xl">
+                <a href="#" class="text-gray-400 hover:text-red-500 transition duration-300 ease-in-out" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-gray-400 hover:text-red-500 transition duration-300 ease-in-out" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-gray-400 hover:text-red-500 transition duration-300 ease-in-out" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-red-500 transition duration-300 ease-in-out" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <p class="text-sm text-gray-500 mt-6">Designed with passion by Alexa Hayes.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                // Close mobile menu after clicking a link
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Scroll to Top Button Logic
+        const scrollToTopButton = document.getElementById('scroll-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 400) { // Show button after scrolling 400px
+                scrollToTopButton.style.display = 'block';
+            } else {
+                scrollToTopButton.style.display = 'none';
+            }
+        });
+
+        scrollToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Simple client-side form submission feedback
+        const contactForm = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent actual form submission
+
+            // Simulate form submission success
+            formMessage.textContent = 'Thank you for your message! We will get back to you soon.';
+            formMessage.classList.remove('hidden');
+            formMessage.classList.remove('text-red-600');
+            formMessage.classList.add('text-green-600');
+
+            // Optionally clear the form
+            contactForm.reset();
+
+            // Hide message after a few seconds
+            setTimeout(() => {
+                formMessage.classList.add('hidden');
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
